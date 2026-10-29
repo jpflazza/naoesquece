@@ -1,5 +1,5 @@
 package com.naoesquece.naoesquece.model;
-
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
