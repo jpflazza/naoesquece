@@ -6,8 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
@@ -54,50 +56,49 @@ public class LembreteController {
             return ResponseEntity.notFound().build();
         }
     }
-}
 
-@GetMapping("/{id}")
-public ResponseEntity<Lembrete> buscarPorId(@PathVariable Long id) {
-    Optional<Lembrete> lembreteOpt = buscarLembretePorId(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<Lembrete> buscarPorId(@PathVariable Long id) {
+        Optional<Lembrete> lembreteOpt = buscarLembretePorId(id);
 
-    if (lembreteOpt.isPresent()) {
-        return ResponseEntity.ok(lembreteOpt.get());
-    } else {
-        return ResponseEntity.notFound().build();
-    }
-}
-
-@PatchMapping("/{id}/concluir")
-public ResponseEntity<Lembrete> concluir(@PathVariable Long id) {
-    Optional<Lembrete> lembreteOpt = buscarLembretePorId(id);
-
-    if (lembreteOpt.isPresent()) {
-        Lembrete lembrete = lembreteOpt.get();
-        lembrete.setStatus(Status.CONCLUIDO);
-        lembrete.setAtualizadoEm(LocalDateTime.now());
-        return ResponseEntity.ok(lembrete);
-    } else {
-        return ResponseEntity.notFound().build();
-    }
-}
-
-@DeleteMapping("/{id}")
-public ResponseEntity<Void> excluir(@PathVariable Long id) {
-    Optional<Lembrete> lembreteOpt = buscarLembretePorId(id);
-
-    if (lembreteOpt.isPresent()) {
-        lembretes.remove(lembreteOpt.get());
-        return ResponseEntity.noContent().build();
-    } else {
-        return ResponseEntity.notFound().build();
-    }
-}
-
-private Optional<Lembrete> buscarLembretePorId(Long id) {
-    for (Lembrete l : lembretes) {
-        if (l.getId().equals(id)) {
-            return Optional.of(l);
+        if (lembreteOpt.isPresent()) {
+            return ResponseEntity.ok(lembreteOpt.get());
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
-    return Optional.empty();
-}
+
+    @PatchMapping("/{id}/concluir")
+    public ResponseEntity<Lembrete> concluir(@PathVariable Long id) {
+        Optional<Lembrete> lembreteOpt = buscarLembretePorId(id);
+
+        if (lembreteOpt.isPresent()) {
+            Lembrete lembrete = lembreteOpt.get();
+            lembrete.setStatus(Status.CONCLUIDO);
+            lembrete.setAtualizadoEm(LocalDateTime.now());
+            return ResponseEntity.ok(lembrete);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluir(@PathVariable Long id) {
+        Optional<Lembrete> lembreteOpt = buscarLembretePorId(id);
+
+        if (lembreteOpt.isPresent()) {
+            lembretes.remove(lembreteOpt.get());
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+        private Optional<Lembrete> buscarLembretePorId(Long id) {
+            for (Lembrete l : lembretes) {
+                if (l.getId().equals(id)) {
+                    return Optional.of(l);
+                }
+            }
+        return Optional.empty();
+        }
+    }
