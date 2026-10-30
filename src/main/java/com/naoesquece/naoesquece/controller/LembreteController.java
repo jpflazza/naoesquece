@@ -1,7 +1,9 @@
 package com.naoesquece.naoesquece.controller;
-
-import com.naoesquece.naoesquece.DTO.LembreteRequestDTO;
-import com.naoesquece.naoesquece.DTO.LembreteResponseDTO;
+import com.naoesquece.naoesquece.service.LembreteService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import com.naoesquece.naoesquece.dto.LembreteRequestDTO;
+import com.naoesquece.naoesquece.dto.LembreteResponseDTO;
 import com.naoesquece.naoesquece.exception.ResourceNotFoundException;
 import com.naoesquece.naoesquece.model.Lembrete;
 import com.naoesquece.naoesquece.model.Status;
@@ -15,12 +17,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
+
+
 @RestController
 @RequestMapping("/api/lembretes")
 public class LembreteController {
 
-    private final List<Lembrete> lembretes = new ArrayList<>();
-    private final AtomicLong geradorId = new AtomicLong(1);
+
+    private final LembreteService lembreteService;
+
+    public LembreteController(LembreteService lembreteService) {
+        this.lembreteService = lembreteService;
+    }
 
     @PostMapping
     public ResponseEntity<LembreteResponseDTO> cadastrar(
@@ -115,5 +123,16 @@ public class LembreteController {
         throw new ResourceNotFoundException(
                 "Lembrete não encontrado com ID: " + id
         );
+    }
+
+    package com.seuprojeto.controller;
+
+    @RestController
+    @RequestMapping("/lembretes")
+    public class LembreteController {
+
+        @Autowired
+        private LembreteService lembreteService;
+
     }
 }

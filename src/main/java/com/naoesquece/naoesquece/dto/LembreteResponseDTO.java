@@ -1,4 +1,4 @@
-package com.naoesquece.naoesquece.DTO;
+package com.naoesquece.naoesquece.dto;
 
 import com.naoesquece.naoesquece.model.Lembrete;
 import com.naoesquece.naoesquece.model.Prioridade;
