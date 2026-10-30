@@ -1,5 +1,4 @@
 package com.naoesquece.naoesquece.model;
-import java.util.Optional;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,24 +8,38 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "lembrete")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "lembrete")
 public class Lembrete {
-    @Enumerated(EnumType.STRING)
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, length = 100)
     private String titulo;
+
+    @Column(length = 255)
     private String descricao;
+
     @Column(name = "data_hora", nullable = false)
     private LocalDateTime dataHora;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
     private Prioridade prioridade;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
     private Status status = Status.PENDENTE;
+
     @Column(name = "criado_em")
     private LocalDateTime criadoEm;
+
     @Column(name = "atualizado_em")
     private LocalDateTime atualizadoEm;
 }

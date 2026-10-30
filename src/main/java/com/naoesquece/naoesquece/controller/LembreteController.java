@@ -1,17 +1,19 @@
-
 package com.naoesquece.naoesquece.controller;
 
+import com.naoesquece.naoesquece.model.Prioridade;
+import com.naoesquece.naoesquece.model.Status;
 import com.naoesquece.naoesquece.service.LembreteService;
 import com.naoesquece.naoesquece.dto.LembreteRequestDTO;
 import com.naoesquece.naoesquece.dto.LembreteResponseDTO;
-import com.naoesquece.naoesquece.model.Lembrete;
 
 import jakarta.validation.Valid;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -33,11 +35,14 @@ public class LembreteController {
                 .body(lembreteService.cadastrar(request));
     }
 
-    // Listar todos os lembretes
+    // Listar todos ou filtrar por status e prioridade
     @GetMapping
-    public ResponseEntity<List<LembreteResponseDTO>> listar() {
+    public ResponseEntity<List<LembreteResponseDTO>> listar(
+            @RequestParam(required = false) Status status,
+            @RequestParam(required = false) Prioridade prioridade) {
 
-        return ResponseEntity.ok(lembreteService.listarTodos());
+        return ResponseEntity.ok(
+                lembreteService.listarComFiltros(status, prioridade));
     }
 
     // Buscar lembrete por ID
@@ -73,5 +78,27 @@ public class LembreteController {
         lembreteService.excluir(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    // Buscar lembretes por período
+    @GetMapping("/periodo")
+    public ResponseEntity<List<LembreteResponseDTO>> buscarPorPeriodo(
+            @RequestParam
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+            LocalDateTime inicio,
+
+            @RequestParam
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+            LocalDateTime fim) {
+
+        return ResponseEntity.ok(
+                lembreteService.buscarPorPeriodo(inicio, fim));
+    }
+
+    // Listar lembretes atrasados
+    @GetMapping("/atrasados")
+    public ResponseEntity<List<LembreteResponseDTO>> listarAtrasados() {
+
+        return ResponseEntity.ok(lembreteService.listarAtrasados());
     }
 }
